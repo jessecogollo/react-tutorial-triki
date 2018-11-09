@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 function Square(props) {
-  console.log(' Square props', props);
   return (
     <button
         className="square"
@@ -15,8 +14,7 @@ function Square(props) {
 }
 
 class Board extends React.Component {
-    renderSquare(i) {
-    console.log('this.props', this.props);
+  renderSquare(i) {
     return <Square
       value={this.props.squares[i]}
       onClick={() => this.props.onClick(i)}
@@ -51,36 +49,29 @@ class Game extends React.Component {
     super(props);
     this.state = {
       history: [{
-        squares: Array(9).fill(null)
+        squares: Array(9).fill(null),
+        coordinates: ''
       }],
       stepNumber: 0,
-      xIsNext: true,
-      position: 0
+      xIsNext: true
     }
   }
   handleClick(i) {
-    console.log('i', i);
-    console.log('handleClick this.state.history', this.state.history);
-    console.log('handleClick this.state.stepNumber', this.state.stepNumber);
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
-    console.log('handleClick history', history);
     const current = history[history.length - 1];
-    // console.log('handleClick current.squares0', current.squares);
     const squares = current.squares.slice();
-    // console.log('handleClick squares0', squares);
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
-    // console.log('handleClick squares1', squares);
+    const coordinates = getCoordinates(i);
     squares[i] = this.state.xIsNext ? 'X' : '0';
-    // console.log('handleClick squares2', squares);
     this.setState({
       history: history.concat([{
-        squares: squares
+        squares: squares,
+        coordinates: coordinates
       }]),
       stepNumber: history.length,
-      xIsNext: !this.state.xIsNext,
-      position: i
+      xIsNext: !this.state.xIsNext
     });
   }
   jumpTo(step) {
@@ -91,16 +82,11 @@ class Game extends React.Component {
   }
   render() {
     const history = this.state.history;
-    console.log('render history', history);
     const current = history[this.state.stepNumber];
-    console.log('render current', current);
     const winner = calculateWinner(current.squares);
-    console.log('render winner', winner);
-    // const position = this.state.position;
-    // const coordinates = getCoordinates(position);
     const moves = history.map((step, move) => {
       const desc = move ?
-        `Go to move #${move}` :
+        `Go to move #${move} ${step.coordinates}` :
         'Go to game start';
       return (
         <li key={move}>
@@ -182,4 +168,4 @@ function getCoordinates(position) {
     default:
       return '';
   }
-}
+};
