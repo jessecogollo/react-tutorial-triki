@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+// import { Appbar, Button, Container } from 'muicss/react';
+// import Appbar from 'muicss/lib/react/appbar';
+import Button from 'muicss/lib/react/button';
+// import Container from 'muicss/lib/react/container';
 
 function Square(props) {
   return (
@@ -85,12 +89,17 @@ class Game extends React.Component {
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
     const moves = history.map((step, move) => {
+      console.log('step', step);
+      console.log('move', move);
+      console.log('this.state.stepNumber', this.state.stepNumber);
       const desc = move ?
         `Go to move #${move} ${step.coordinates}` :
         'Go to game start';
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <Button className="primary" variant="raised"  onClick={() => this.jumpTo(move)}>
+            {(move === this.state.stepNumber ? <b>{desc}</b> : desc)}
+          </Button>
         </li>
       )
     });
@@ -103,7 +112,6 @@ class Game extends React.Component {
     return (
       <div className="game">
         <div className="game-board">
-        <h4>@jessecogollo</h4>
           <Board
             squares={current.squares}
             onClick={(i) => this.handleClick(i)}
