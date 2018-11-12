@@ -26,25 +26,18 @@ class Board extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
-    );
+    let boardRow = [];
+    let count = 0;
+    for (let i = 0; i <= 2; i++) {
+      boardRow.push(<div className="board-row"></div>)
+      for (let j = 0; j <= 2; j++) {
+        boardRow.push(this.renderSquare(count));
+        count++;
+      }
+    }
+    return (<div>
+      {boardRow}
+    </div>)
   }
 }
 
@@ -89,9 +82,6 @@ class Game extends React.Component {
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
     const moves = history.map((step, move) => {
-      console.log('step', step);
-      console.log('move', move);
-      console.log('this.state.stepNumber', this.state.stepNumber);
       const desc = move ?
         `Go to move #${move} ${step.coordinates}` :
         'Go to game start';
