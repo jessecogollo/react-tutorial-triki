@@ -8,18 +8,20 @@ import Button from 'muicss/lib/react/button';
 
 function Square(props) {
   return (
-    <button
+    <Button
         className="square"
+        style={{background: `${props.background}` }}
         onClick={() => props.onClick() }
       >
         { props.value }
-      </button>
+      </Button>
   )
 }
 
 class Board extends React.Component {
   renderSquare(i) {
     return <Square
+      background= {this.props.background[i]}
       value={this.props.squares[i]}
       onClick={() => this.props.onClick(i)}
       key={i+10}
@@ -48,6 +50,7 @@ class Game extends React.Component {
     this.state = {
       history: [{
         squares: Array(9).fill(null),
+        background: Array(9).fill('white'),
         coordinates: ''
       }],
       stepNumber: 0,
@@ -58,15 +61,27 @@ class Game extends React.Component {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
-    if (calculateWinner(squares) || squares[i]) {
+    const background = current.background.slice();
+    const winner = calculateWinner(squares);
+    if (winner || squares[i]) {
+      background[winner.positionWinner[0]] = 'blue';
+      background[winner.positionWinner[1]] = 'blue';
+      background[winner.positionWinner[2]] = 'blue';
+      this.setState({
+        history: history.concat([{
+          background: background
+        }])
+      });
       return;
     }
     const coordinates = getCoordinates(i);
     squares[i] = this.state.xIsNext ? 'X' : '0';
+    background[i] = 'white';
     this.setState({
       history: history.concat([{
         squares: squares,
-        coordinates: coordinates
+        coordinates: coordinates,
+        background: background
       }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext
@@ -96,7 +111,10 @@ class Game extends React.Component {
     });
     let status;
     if(winner) {
-      status = `Winner ${winner}`;
+      current.background[winner.positionWinner[0]] = 'green';
+      current.background[winner.positionWinner[1]] = 'green';
+      current.background[winner.positionWinner[2]] = 'green';
+      status = `Winner ${winner.winner} - ${winner.positionWinner}`;
     } else {
       status = `Next player: ${(this.state.xIsNext ? 'X' : '0')}`;
     }
@@ -104,6 +122,7 @@ class Game extends React.Component {
       <div className="game">
         <div className="game-board">
           <Board
+            background={current.background}
             squares={current.squares}
             onClick={(i) => this.handleClick(i)}
           />
@@ -138,7 +157,10 @@ function calculateWinner(squares) {
   for (let i=0; i< lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return {
+        winner:squares[a],
+        positionWinner: lines[i]
+      };
     }
   }
   return null;
