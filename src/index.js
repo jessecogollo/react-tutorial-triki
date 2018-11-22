@@ -64,14 +64,6 @@ class Game extends React.Component {
     const background = current.background.slice();
     const winner = calculateWinner(squares);
     if (winner || squares[i]) {
-      background[winner.positionWinner[0]] = 'blue';
-      background[winner.positionWinner[1]] = 'blue';
-      background[winner.positionWinner[2]] = 'blue';
-      this.setState({
-        history: history.concat([{
-          background: background
-        }])
-      });
       return;
     }
     const coordinates = getCoordinates(i);
@@ -115,9 +107,12 @@ class Game extends React.Component {
       current.background[winner.positionWinner[1]] = 'green';
       current.background[winner.positionWinner[2]] = 'green';
       status = `Winner ${winner.winner} - ${winner.positionWinner}`;
+    } else if(this.state.stepNumber === 9) {
+      status = `Draw`
     } else {
       status = `Next player: ${(this.state.xIsNext ? 'X' : '0')}`;
     }
+
     return (
       <div className="game">
         <div className="game-board">
