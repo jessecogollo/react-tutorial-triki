@@ -1,3 +1,11 @@
+# TRIKI (Usando ReactJS)
+
+  - Este proyecto se realizo siguiendo los pasos del siguiente [link](https://reactjs.org/tutorial/tutorial.html)
+
+  - Para el CSS se utilizo [muicss](https://www.muicss.com)
+
+***
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
