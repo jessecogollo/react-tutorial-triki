@@ -4,7 +4,7 @@
 
   - Para el CSS se utilizo [muicss](https://www.muicss.com)
 
-  - Para revisar el resultado final click en el ***[link](https://build-aruxizparw.now.sh)***
+  - Para revisar el resultado final click en el ***[link](https://build-qykvautsrr.now.sh )***
 
 ***
 
